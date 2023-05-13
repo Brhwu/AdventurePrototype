@@ -9,12 +9,9 @@ class Demo1 extends AdventureScene {
         this.load.image('door', 'Door.png');
         this.load.image('shelf', 'Shelf.png');
     }
-    
 
     onEnter() {
-
         //this.add.rectangle(this.w * 1.25, 0, this.w * 1.75, this.h).setOrigin(0, 0).setFillStyle(0);
-
         let bed = this.add.image(
             1000,//x
             1000,//y
@@ -42,51 +39,49 @@ class Demo1 extends AdventureScene {
             .setInteractive()
             .on('pointerover', () => this.showMessage("It's your shelf, you should get something to place on it soon."))
 
+        let backbutton = this.add.image(
+            600,//x
+            700,//y
+            'button_back',//imagename
+        )
+            .setInteractive()
+            .on('pointerover', () => {
+            if (this.hasItem("button")) {
+                this.showMessage("You put the button on the block");
+                } 
+            else {
+                this.showMessage("Its a block, you feel like a button should be here");
+                }
+            })
+            .on('pointerdown', () => {
+                if (this.hasItem("button")) {
+                    this.loseItem("buttom");
+                    this.showMessage("*ding*");
+                    this.tweens.add({
+                        targets: door,
+                        x:200,
+                        y:800
+                    });
+                }
+            }) 
 
-
-            let backbutton = this.add.image(
-                600,//x
-                700,//y
-                'button_back',//imagename
-            )
-
-                .setInteractive()
-                .on('pointerover', () => {
-                    if (this.hasItem("button")) {
-                        this.showMessage("You put the button on the block");
-                    } else {
-                        this.showMessage("Its a block, you feel like a button should be here");
-                    }
-                })
-                .on('pointerdown', () => {
-                    if (this.hasItem("button")) {
-                        this.loseItem("buttom");
-                        this.showMessage("*ding*");
-                        this.tweens.add({
-                            targets: door,
-                            x:200,
-                            y:800
-                        });
-                    }
-                }) 
-
-            let door = this.add.image(
-                200,//x
-                1600,//y
-                'door',//imagename
-            )
-
-                .setInteractive()
-                .on('pointerover', () => {
-                    if (this.hasItem("button")) {
-                        this.showMessage("This is a door");
-                    } else {
-                        this.showMessage("Its a block, you feel like a button should be here");
-                    }
-                })
-                .on('pointerdown', () => {
-                    this.gotoScene('demo2');
-                }) 
+        let door = this.add.image(
+            200,//x
+            1600,//y
+            'door',//imagename
+        )
+            .setInteractive()
+            .on('pointerover', () => {
+            if (this.hasItem("button")) {
+                this.showMessage("This is a door");
+            } 
+            else {
+                this.showMessage("Its a block, you feel like a button should be here");
+            }
+            })
+            .on('pointerdown', () => {
+                this.gotoScene('demo2');
+            }) 
 
         let button = this.add.text(this.w * 0.5, this.w * 0.15, "🔴 button")
             .setFontSize(this.s * 2)
@@ -115,24 +110,24 @@ class Demo2 extends AdventureScene {
     }
     preload() {
         this.load.image('flipper', 'Flipper.png');
-        this.load.image('flipsign', 'FlipSign.png');
+        //this.load.image('flipsign', 'FlipSign.png');
         this.load.image('flip', 'Flip.png');
         //this.load.image('NotDoor', 'Shelf.png');
     }
     onEnter() {
-
+/*
         let flipsign = this.add.image(
             300,//x
             600,//y
             'flipsign',//imagename
         )
-
+*/
         let flip = this.add.image(
-            300,//x
-            600,//y
+            500,//x
+            300,//y
             'flip',//imagename
         ) 
-        
+        .setInteractive()
         .on('pointerover', () => {
             this.showMessage("Wow, its a free flip!")
         })
@@ -148,11 +143,14 @@ class Demo2 extends AdventureScene {
             });
         })
 
+        let thing = this.add.circle(1000, 600, 300, 0xff0000);
+
         let flipper = this.add.image(
-            800,//x
+            300,//x
             600,//y
             'flipper',//imagename
             )
+            .setScale(0.8)
             .setInteractive()
             .on('pointerover', () => {
                 if (this.hasItem("flip")) {
@@ -167,15 +165,29 @@ class Demo2 extends AdventureScene {
                     this.showMessage("Weeeeee");
                     this.tweens.add({
                         targets: flipper,
-                        x: 2000,
+                        x: 5000,
                         y: 200,
                         duration: 1000,
-                        rotation: 5
+                        rotation: 20
                     });
+                    this.tweens.add({
+                        targets: thing,
+                        x: 5000,
+                        y: 200,
+                        duration: 1000,
+                        rotation: 20
+                    });
+                    let exit = this.add.circle(1000, 600, 300, 0x000000)
+                        .setInteractive()
+                        .on('pointerover', () => {
+                            this.showMessage("Keep going")
+                        })
+                        .on('pointerdown', () => {
+                            this.gotoScene('demo3');
+                        }) 
                 }
             })
 
-        let thing = this.add.circle(150, 150, 100, 0xff0000);
         /*this.add.tween({
             targets: thing,
             scale: {from: 0, to: 1},
@@ -187,7 +199,7 @@ class Demo2 extends AdventureScene {
     }
 }
 
-/* class Demo3 extends AdventureScene {
+class Demo3 extends AdventureScene {
     constructor() {
         super("demo3", "The third room has a long name (it truly does).");
     }
@@ -205,7 +217,7 @@ class Demo2 extends AdventureScene {
             'cow',//imagename
         )
     }
-} */
+} 
 
 /* class Demo4 extends AdventureScene {
     constructor() {
@@ -261,7 +273,7 @@ const game = new Phaser.Game({
         width: 1920,
         height: 1080
     },
-    scene: [Intro, Demo1, Demo2, Outro],
+    scene: [Intro, Demo1, Demo2, Demo3, Outro],
     title: "Adventure Game",
 });
 
