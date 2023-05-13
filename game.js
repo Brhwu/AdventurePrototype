@@ -41,17 +41,7 @@ class Demo1 extends AdventureScene {
         )
             .setInteractive()
             .on('pointerover', () => this.showMessage("It's your shelf, you should get something to place on it soon."))
-            /*.on('pointerdown', () => {
-                this.showMessage("You probably should not sleep");
-                this.tweens.add({
-                    targets: clip,
-                    x: '+=' + this.s,
-                    repeat: 2,
-                    yoyo: true,
-                    ease: 'Sine.inOut',
-                    duration: 100
-                });
-            }); */
+
 
 
             let backbutton = this.add.image(
@@ -126,35 +116,117 @@ class Demo2 extends AdventureScene {
     preload() {
         this.load.image('flipper', 'Flipper.png');
         this.load.image('flipsign', 'FlipSign.png');
-        this.load.image('door', 'Door.png');
-        this.load.image('shelf', 'Shelf.png');
+        this.load.image('flip', 'Flip.png');
+        //this.load.image('NotDoor', 'Shelf.png');
     }
     onEnter() {
-        this.add.text(this.w * 0.3, this.w * 0.4, "just go back")
-            .setFontSize(this.s * 2)
+
+        let flipsign = this.add.image(
+            300,//x
+            600,//y
+            'flipsign',//imagename
+        )
+
+        let flip = this.add.image(
+            300,//x
+            600,//y
+            'flip',//imagename
+        ) 
+        
+        .on('pointerover', () => {
+            this.showMessage("Wow, its a free flip!")
+        })
+        .on('pointerdown', () => {
+            this.showMessage("You pick up the flip.");
+            this.gainItem('flip');
+            this.tweens.add({
+                targets: flip,
+                y: `-=${2 * this.s}`,
+                alpha: { from: 1, to: 0 },
+                duration: 500,
+                onComplete: () => flip.destroy()
+            });
+        })
+
+        let flipper = this.add.image(
+            800,//x
+            600,//y
+            'flipper',//imagename
+            )
             .setInteractive()
             .on('pointerover', () => {
-                this.showMessage("You've got no other choice, really.");
+                if (this.hasItem("flip")) {
+                    this.showMessage("You can hand him the flip");
+                } else {
+                    this.showMessage("You hear him mutter something about a flip");
+                }
             })
             .on('pointerdown', () => {
-                this.gotoScene('demo1');
-            });
-
-        let finish = this.add.text(this.w * 0.6, this.w * 0.2, '(finish the game)')
-            .setInteractive()
-            .on('pointerover', () => {
-                this.showMessage('*giggles*');
-                this.tweens.add({
-                    targets: finish,
-                    x: this.s + (this.h - 2 * this.s) * Math.random(),
-                    y: this.s + (this.h - 2 * this.s) * Math.random(),
-                    ease: 'Sine.inOut',
-                    duration: 500
-                });
+                if (this.hasItem("flip")) {
+                    this.loseItem("flip");
+                    this.showMessage("Weeeeee");
+                    this.tweens.add({
+                        targets: flipper,
+                        x: 2000,
+                        y: 200,
+                        duration: 1000,
+                        rotation: 5
+                    });
+                }
             })
-            .on('pointerdown', () => this.gotoScene('outro'));
+
+        let thing = this.add.circle(150, 150, 100, 0xff0000);
+        /*this.add.tween({
+            targets: thing,
+            scale: {from: 0, to: 1},
+            duration: 1000
+        }); */
+
+
+
     }
 }
+
+/* class Demo3 extends AdventureScene {
+    constructor() {
+        super("demo3", "The third room has a long name (it truly does).");
+    }
+    preload() {
+        this.load.image('cow', 'Cowupdated.png');
+        this.load.image('bucket', 'Bucket.png');
+        this.load.image('spicytext', 'Spicytext.png');
+        //this.load.image('NotDoor', 'Shelf.png');
+    }
+    onEnter() {
+
+        let cow = this.add.image(
+            300,//x
+            600,//y
+            'cow',//imagename
+        )
+    }
+} */
+
+/* class Demo4 extends AdventureScene {
+    constructor() {
+        super("demo4", "The 4th room has a long name (it truly does).");
+    }
+    preload() {
+        this.load.image('cow', 'Cowupdated.png');
+        this.load.image('bucket', 'Bucket.png');
+        this.load.image('spicytext', 'Spicytext.png');
+        //this.load.image('NotDoor', 'Shelf.png');
+    }
+    onEnter() {
+
+        let cow = this.add.image(
+            300,//x
+            600,//y
+            'cow',//imagename
+        )
+    }
+} */
+
 
 class Intro extends Phaser.Scene {
     constructor() {
