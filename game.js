@@ -212,10 +212,34 @@ class Demo3 extends AdventureScene {
     onEnter() {
 
         let cow = this.add.image(
-            300,//x
+            350,//x
             600,//y
             'cow',//imagename
         )
+        .setInteractive()
+        .setScale(0.5)
+        .on('pointerover', () => {
+            if (this.hasItem("bucket")) {
+                this.showMessage("You can milk the cow for milk");
+            } else {
+                this.showMessage("It is a cow.");
+            }
+        })
+        .on('pointerdown', () => {
+            if (this.hasItem("bucket")) {
+                this.loseItem("bucket");
+                this.showMessage("You have milked the cow");
+                this.tweens.add({
+                    targets: flipper,
+                    x: 5000,
+                    y: 200,
+                    duration: 1000,
+                    rotation: 20
+                });
+            }
+        })
+                
+                
     }
 } 
 
