@@ -95,26 +95,10 @@ class Demo1 extends AdventureScene {
                     }
                 })
                 .on('pointerdown', () => {
+                    this.gotoScene('demo2');
                 }) 
-        /*
-        let clip = this.add.text(this.w * 0.3, this.w * 0.3, "🔴 button")
-            .setFontSize(this.s * 2)
-            .setInteractive()
-            .on('pointerover', () => this.showMessage("Metal, bent."))
-            .on('pointerdown', () => {
-                this.showMessage("No touching!");
-                this.tweens.add({
-                    targets: clip,
-                    x: '+=' + this.s,
-                    repeat: 2,
-                    yoyo: true,
-                    ease: 'Sine.inOut',
-                    duration: 100
-                });
-            }); 
-            */
 
-        let button = this.add.text(this.w * 0.5, this.w * 0.1, "🔴 button")
+        let button = this.add.text(this.w * 0.5, this.w * 0.15, "🔴 button")
             .setFontSize(this.s * 2)
             .setInteractive()
             .on('pointerover', () => {
@@ -131,32 +115,19 @@ class Demo1 extends AdventureScene {
                     onComplete: () => button.destroy()
                 });
             })  
-/*
-        let door = this.add.text(this.w * 0.1, this.w * 0.15, "🚪 locked door")
-            .setFontSize(this.s * 2)
-            .setInteractive()
-            .on('pointerover', () => {
-                if (this.hasItem("key")) {
-                    this.showMessage("You've got the key for this door.");
-                } else {
-                    this.showMessage("It's locked. Can you find a key?");
-                }
-            })
-            .on('pointerdown', () => {
-                if (this.hasItem("key")) {
-                    this.loseItem("key");
-                    this.showMessage("*squeak*");
-                    door.setText("🚪 unlocked door");
-                    this.gotoScene('demo2');
-                }
-            }) */
-            
+
     }
 }
 
 class Demo2 extends AdventureScene {
     constructor() {
         super("demo2", "The second room has a long name (it truly does).");
+    }
+    preload() {
+        this.load.image('flipper', 'Flipper.png');
+        this.load.image('flipsign', 'FlipSign.png');
+        this.load.image('door', 'Door.png');
+        this.load.image('shelf', 'Shelf.png');
     }
     onEnter() {
         this.add.text(this.w * 0.3, this.w * 0.4, "just go back")
