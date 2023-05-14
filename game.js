@@ -284,7 +284,7 @@ class Demo3 extends AdventureScene {
             .on('pointerdown', () => {
                 if (this.hasItem("bucket of milk")) {
                     this.loseItem("bucket of milk");
-                    this.showMessage("You eat the chili pepper and quickly drink the milk afterwards. There is a mild burning sensation in your throat");
+                    this.showMessage("You eat the chili pepper and quickly drink the milk afterwards. Even with the milk it is extremely spicy and you pass out");
                     //door.setText("🚪 unlocked door");
                     //this.showMessage("There is a mild burning sensation in your throat");
                     this.tweens.add({
@@ -294,7 +294,9 @@ class Demo3 extends AdventureScene {
                         duration: 500,
                         onComplete: () => chili.destroy()
                     });
-                    this.gotoScene('demo4');
+                    this.time.delayedCall(1000, () => {
+                        this.gotoScene('demo4');
+                    })
                 }
             })
     }
@@ -302,21 +304,40 @@ class Demo3 extends AdventureScene {
 
 class Demo4 extends AdventureScene {
     constructor() {
-        super("demo4", "The 4th room has a long name (it truly does).");
+        super("demo4", "The second room has a long name (it truly does).");
     }
     preload() {
-        //this.load.image('cow', 'Cowupdated.png');
-        //this.load.image('bucket', 'Bucket.png');
-        //this.load.image('spicytext', 'Spicytext.png');
-        //this.load.image('NotDoor', 'Shelf.png');
+        this.load.image('star', 'Star.png');
     }
     onEnter() {
+        this.add.text(this.w * 0.3, this.w * 0.4, "just go back")
+            .setFontSize(this.s * 2)
+            .setInteractive()
+            .on('pointerover', () => {
+                this.showMessage("You've got no other choice, really.");
+            })
+            .on('pointerdown', () => {
+                this.gotoScene('demo1');
+            });
 
-        let cow = this.add.image(
-            300,//x
-            600,//y
-            'cow',//imagename
+        let finish = this.add.image(
+            1000,
+            400,
+            'star'
         )
+            .setInteractive()
+            .setScale(0.1)
+            .on('pointerover', () => {
+                this.showMessage('*giggles*');
+                this.tweens.add({
+                    targets: finish,
+                    x: this.s + (this.h - 2 * this.s) * Math.random(),
+                    y: this.s + (this.h - 2 * this.s) * Math.random(),
+                    ease: 'Sine.inOut',
+                    duration: 200
+                });
+            })
+            .on('pointerdown', () => this.gotoScene('outro'));
     }
 } 
 
@@ -354,7 +375,7 @@ const game = new Phaser.Game({
         width: 1920,
         height: 1080
     },
-    scene: [Intro, Demo1, Demo2, Demo3, Outro],
+    scene: [Intro, Demo1, Demo2, Demo3, Demo4, Outro],
     title: "Adventure Game",
 });
 
