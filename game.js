@@ -55,7 +55,9 @@ class Demo1 extends AdventureScene {
             })
             .on('pointerdown', () => {
                 if (this.hasItem("button")) {
-                    this.loseItem("buttom");
+                    this.add.text(575, 700, "🔴")
+                    .setFontSize(this.s * 2)
+                    this.loseItem("button");
                     this.showMessage("*ding*");
                     this.tweens.add({
                         targets: door,
@@ -206,14 +208,14 @@ class Demo3 extends AdventureScene {
     preload() {
         this.load.image('cow', 'Cowupdated.png');
         this.load.image('bucket', 'Bucket.png');
-        this.load.image('spicytext', 'Spicytext.png');
+        this.load.image('spicytext', 'SpicyText.png');
         //this.load.image('NotDoor', 'Shelf.png');
     }
     onEnter() {
 
         let cow = this.add.image(
             350,//x
-            600,//y
+            800,//y
             'cow',//imagename
         )
         .setInteractive()
@@ -226,31 +228,86 @@ class Demo3 extends AdventureScene {
             }
         })
         .on('pointerdown', () => {
-            if (this.hasItem("bucket")) {
-                this.loseItem("bucket");
+            if (this.hasItem("empty bucket")) {
+                this.loseItem("empty bucket");
                 this.showMessage("You have milked the cow");
-                this.tweens.add({
+                this.gainItem('bucket of milk');
+                /*this.tweens.add({
                     targets: flipper,
                     x: 5000,
                     y: 200,
                     duration: 1000,
                     rotation: 20
-                });
+                }); */
             }
         })
-                
-                
+
+        let bucket = this.add.image(
+            1200,//x
+            950,//y
+            'bucket',//imagename
+        )
+            .setInteractive()
+            .setScale(0.3)   
+            .on('pointerover', () => {
+                this.showMessage("It's a bucket.")
+            })
+            .on('pointerdown', () => {
+                this.showMessage("You pick up the bucket.");
+                this.gainItem('empty bucket');
+                this.tweens.add({
+                    targets: bucket,
+                    y: `-=${2 * this.s}`,
+                    alpha: { from: 1, to: 0 },
+                    duration: 500,
+                    onComplete: () => bucket.destroy()
+                });
+            }) 
+
+        let spicytext = this.add.image(
+            1000,
+            400,
+            'spicytext'
+        )
+            .setInteractive()
+            .setScale(0.8)
+            .on('pointerover', () => {
+                this.showMessage("How ominous...")
+            })   
+
+        let chili = this.add.text(1200, 50, "🌶️")
+            .setFontSize(this.s * 4)
+            .setInteractive()
+            .on('pointerover', () => {
+                this.showMessage("Just looking at it gives you a burning sensation")
+            })   
+            .on('pointerdown', () => {
+                if (this.hasItem("bucket of milk")) {
+                    this.loseItem("bucket of milk");
+                    this.showMessage("You eat the chili pepper and quickly drink the milk afterwards. There is a mild burning sensation in your throat");
+                    //door.setText("🚪 unlocked door");
+                    //this.showMessage("There is a mild burning sensation in your throat");
+                    this.tweens.add({
+                        targets: chili,
+                        y: `-=${2 * this.s}`,
+                        alpha: { from: 1, to: 0 },
+                        duration: 500,
+                        onComplete: () => chili.destroy()
+                    });
+                    this.gotoScene('demo4');
+                }
+            })
     }
 } 
 
-/* class Demo4 extends AdventureScene {
+class Demo4 extends AdventureScene {
     constructor() {
         super("demo4", "The 4th room has a long name (it truly does).");
     }
     preload() {
-        this.load.image('cow', 'Cowupdated.png');
-        this.load.image('bucket', 'Bucket.png');
-        this.load.image('spicytext', 'Spicytext.png');
+        //this.load.image('cow', 'Cowupdated.png');
+        //this.load.image('bucket', 'Bucket.png');
+        //this.load.image('spicytext', 'Spicytext.png');
         //this.load.image('NotDoor', 'Shelf.png');
     }
     onEnter() {
@@ -261,7 +318,7 @@ class Demo3 extends AdventureScene {
             'cow',//imagename
         )
     }
-} */
+} 
 
 
 class Intro extends Phaser.Scene {
