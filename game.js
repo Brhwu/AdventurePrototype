@@ -1,6 +1,6 @@
-class Demo1 extends AdventureScene {
+class Room extends AdventureScene {
     constructor() {
-        super("demo1", "Your Room");
+        super("room", "Your Room");
     }
 
     preload() {
@@ -8,6 +8,7 @@ class Demo1 extends AdventureScene {
         this.load.image('bed', 'Bed.png');
         this.load.image('door', 'Door.png');
         this.load.image('shelf', 'Shelf.png');
+        this.load.image('flipper1', 'Flipper1.png');
     }
 
     onEnter() {
@@ -82,7 +83,7 @@ class Demo1 extends AdventureScene {
             }
             })
             .on('pointerdown', () => {
-                this.gotoScene('demo2');
+                this.gotoScene('flip');
             }) 
 
         let button = this.add.text(this.w * 0.5, this.w * 0.15, "🔴 button")
@@ -103,18 +104,41 @@ class Demo1 extends AdventureScene {
                 });
             })  
 
+        let flipper1 = this.add.image(
+            500,//x
+            200,//y
+            'flipper1',//imagename
+            )
+            .setScale(0.2)
+            .setInteractive()
+            .setAngle(25)
+            .on('pointerover', () => {
+                this.showMessage("It's an orange figure.")
+            })
+            .on('pointerdown', () => {
+                this.showMessage("You pick up the orange figure.");
+                this.gainItem('Orange Figure');
+                this.tweens.add({
+                    targets: flipper1,
+                    y: `-=${2 * this.s}`,
+                    alpha: { from: 1, to: 0 },
+                    duration: 500,
+                    onComplete: () => flipper1.destroy()
+                });
+            })      
+
     }
 }
 
-class Demo2 extends AdventureScene {
+class Flip extends AdventureScene {
     constructor() {
-        super("demo2", "The Flip Place");
+        super("flip", "The Flip Place");
     }
     preload() {
         this.load.image('flipper', 'Flipper.png');
         //this.load.image('flipsign', 'FlipSign.png');
         this.load.image('flip', 'Flip.png');
-        //this.load.image('NotDoor', 'Shelf.png');
+        this.load.image('pns', 'pns.png');
     }
     onEnter() {
 /*
@@ -186,7 +210,7 @@ class Demo2 extends AdventureScene {
                             this.showMessage("Keep going")
                         })
                         .on('pointerdown', () => {
-                            this.gotoScene('demo3');
+                            this.gotoScene('spicy');
                         }) 
                 }
             })
@@ -196,21 +220,43 @@ class Demo2 extends AdventureScene {
             scale: {from: 0, to: 1},
             duration: 1000
         }); */
+        let pns = this.add.image(
+            1200,//x
+            200,//y
+            'pns',//imagename
+            )
+            .setScale(0.2)
+            .setInteractive()
+            //.setAngle(25)
+            .on('pointerover', () => {
+                this.showMessage("Wow! Its a Pain and Suffering from the game Granblue Fantasy.")
+            })
+            .on('pointerdown', () => {
+                this.showMessage("You pick up the Pain and Suffering and wonder how much your dark grid will improve.");
+                this.gainItem('Pain and Suffering');
+                this.tweens.add({
+                    targets: pns,
+                    y: `-=${2 * this.s}`,
+                    alpha: { from: 1, to: 0 },
+                    duration: 500,
+                    onComplete: () => pns.destroy()
+                });
+            })      
 
 
 
     }
 }
 
-class Demo3 extends AdventureScene {
+class Spicy extends AdventureScene {
     constructor() {
-        super("demo3", "Spice City");
+        super("spicy", "Spice City");
     }
     preload() {
         this.load.image('cow', 'Cowupdated.png');
         this.load.image('bucket', 'Bucket.png');
         this.load.image('spicytext', 'SpicyText.png');
-        //this.load.image('NotDoor', 'Shelf.png');
+        this.load.image('collect', 'Collect1.png');
     }
     onEnter() {
 
@@ -266,8 +312,8 @@ class Demo3 extends AdventureScene {
             }) 
 
         let spicytext = this.add.image(
-            1000,
             400,
+            200,
             'spicytext'
         )
             .setInteractive()
@@ -296,33 +342,102 @@ class Demo3 extends AdventureScene {
                         onComplete: () => chili.destroy()
                     });
                     this.time.delayedCall(1000, () => {
-                        this.gotoScene('demo4');
+                        this.gotoScene('star');
                     })
                 }
                 else {
                     this.showMessage("You feel like there is no going back if you eat this without any precautions.");
                 }
             })
+        let collectable = this.add.image(
+            1000,//x
+            500,//y
+            'collect',//imagename
+            )
+            .setScale(0.2)
+            .setInteractive()
+            //.setAngle(25)
+            .on('pointerover', () => {
+                this.showMessage("Its a weird looking figure.")
+            })
+            .on('pointerdown', () => {
+                this.showMessage("You pick up the weird looking figure.");
+                this.gainItem('Weird Figure');
+                this.tweens.add({
+                    targets: collectable,
+                    y: `-=${2 * this.s}`,
+                    alpha: { from: 1, to: 0 },
+                    duration: 500,
+                    onComplete: () => collectable.destroy()
+                });
+            })     
     }
 } 
 
-class Demo4 extends AdventureScene {
+class Star extends AdventureScene {
     constructor() {
-        super("demo4", "???");
+        super("star", "???");
     }
     preload() {
         this.load.image('star', 'Star.png');
+        this.load.image('flipper1', 'Flipper1.png');
+        this.load.image('pns', 'pns.png')
+        this.load.image('collect', 'Collect1.png');
     }
     onEnter() {
-        this.add.text(this.w * 0.3, this.w * 0.4, "just go back")
-            .setFontSize(this.s * 2)
+        let check = this.add.rectangle(400, 500, 200, 200, 0xFFA500)
             .setInteractive()
             .on('pointerover', () => {
-                this.showMessage("You've got no other choice, really.");
+                this.showMessage("You can place an orange figure on this")
             })
             .on('pointerdown', () => {
-                this.gotoScene('demo1');
-            });
+                if (this.hasItem("Orange Figure")) {
+                    this.add.image(
+                        400,//x
+                        320,//y
+                        'flipper1',//imagename
+                    )
+                    .setScale(0.2)
+                    this.loseItem("Orange Figure");
+                    this.showMessage("You place the figure on the platform");
+                }
+            }) 
+            
+        let check1 = this.add.rectangle(1300, 500, 250, 250, 0x800080)
+            .setInteractive()
+            .on('pointerover', () => {
+                this.showMessage("You can place Pain and Suffering on this")
+            })
+            .on('pointerdown', () => {
+                if (this.hasItem("Pain and Suffering")) {
+                    this.add.image(
+                        1250,//x
+                        250,//y
+                        'pns',//imagename
+                    )
+                    .setScale(0.2)
+                    this.loseItem("Pain and Suffering");
+                    this.showMessage("With great reluctance you place Pain and Suffering on the platform");
+                }
+            }) 
+
+        let check2 = this.add.rectangle(750, 1000, 300, 300, 0xFF0000)
+            .setInteractive()
+            .on('pointerover', () => {
+                this.showMessage("You can place a weird figure on this")
+            })
+            .on('pointerdown', () => {
+                if (this.hasItem("Weird Figure")) {
+                    this.add.image(
+                        750,//x
+                        730,//y
+                        'collect',//imagename
+                    )
+                    .setScale(0.2)
+                    this.loseItem("Weird Figure");
+                    this.showMessage("You place the weird figure on the platform");
+                }
+            }) 
 
         let finish = this.add.image(
             1000,
@@ -359,7 +474,7 @@ class Intro extends Phaser.Scene {
         this.add.text(50,300, "Click anywhere to wake up.").setFontSize(40);
         this.input.on('pointerdown', () => {
             this.cameras.main.fade(1000, 0,0,0);
-            this.time.delayedCall(1000, () => this.scene.start('outro'));
+            this.time.delayedCall(1000, () => this.scene.start('room'));
         });
     }
 }
@@ -419,7 +534,7 @@ const game = new Phaser.Game({
         width: 1920,
         height: 1080
     },
-    scene: [Intro, Demo1, Demo2, Demo3, Demo4, Outro],
+    scene: [Intro, Room, Flip, Spicy, Star, Outro],
     title: "Adventure Game",
 });
 
